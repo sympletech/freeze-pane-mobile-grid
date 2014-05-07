@@ -1,0 +1,47 @@
+﻿.mobile-grid, .mobile-grid .mobile-grid-top-left, .mobile-grid .mobile-grid-top-right,
+.mobile-grid .mobile-grid-left-labels, .mobile-grid .mobile-grid-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: solid 1px black;
+    overflow: hidden;
+}
+
+    .mobile-grid .mobile-grid-top-left {
+        bottom: auto;
+        right: auto;
+        width: 150px;
+        height: 50px;
+    }
+
+    .mobile-grid .mobile-grid-top-right {
+        left: 150px;
+        bottom: auto;
+        height: 50px;
+    }
+
+        .mobile-grid .mobile-grid-top-right > * {
+            position: relative;
+        }
+
+    .mobile-grid .mobile-grid-left-labels {
+        top: 50px;
+        right: auto;
+        width: 150px;
+    }
+
+        .mobile-grid .mobile-grid-left-labels > * {
+            position: relative;
+        }
+
+    .mobile-grid .mobile-grid-content {
+        top: 50px;
+        left: 150px;
+        overflow: scroll;
+    }
+
+        .mobile-grid .mobile-grid-content > * {
+            position: relative;
+        }
