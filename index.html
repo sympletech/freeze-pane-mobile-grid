@@ -56,7 +56,7 @@
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="js/craydent-1.7.23.js"></script>
     <script src="js/hammer.min.js"></script>
-    <script src="js/jquery.hammer.min.js"></script>
+    <script src="js/freeze-pane-mobile-grid.js"></script>
 
     <script type="text/javascript">
         //FAKE DATA FILLER
@@ -66,9 +66,12 @@
             $('#main-content').append('<div>' + bacon + '</div>');
             $('#left-labels-content').append('<div>Link ' + i + '</div>');
         }
+        
+        //INIT GRID
+        $(".mobile-grid").freezePaneMobileGrid();
     </script>
     
-    <script src="js/freeze-pane-mobile-grid.js"></script>
+    
 
 
 </body>

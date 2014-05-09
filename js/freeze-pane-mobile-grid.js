@@ -1,36 +1,67 @@
-﻿(function () {
-    var gridContentWrapper = $('.mobile-grid .mobile-grid-content'),
-        gridContent = $('.mobile-grid .mobile-grid-content > *'),
-        gridHeaders = $('.mobile-grid .mobile-grid-top-right > *'),
-        gridLabels = $('.mobile-grid .mobile-grid-left-labels > *');
+﻿; (function ($) {
 
-    var maxScroll = -(gridContent.outerWidth() - gridContentWrapper.outerWidth());
+    $.fn.freezePaneMobileGrid = function () {
+        return this.each(function () {
 
-    if (Craydent.os.ANDROID || Craydent.os.IOS) {
+            var gridContentWrapper = $(this).find('.mobile-grid-content'),
+                gridContent = $(this).find('.mobile-grid-content > *'),
+                gridHeaders = $(this).find('.mobile-grid-top-right > *'),
+                gridLabels = $(this).find('.mobile-grid-left-labels > *');
 
-        gridContentWrapper.hammer()
-            .on('dragstart', function (e) {
-                var left = parseInt(gridContent.css("left").replace("px", ""));
-                left = isNaN(left) ? 0 : left;
-                gridPos = { x: left };
-            }).on('drag', function (e) {
+            var isMobile = Craydent.os.ANDROID || Craydent.os.IOS;
 
-                var left = e.gesture.deltaX + gridPos.x;
-                left = left > 0 ? 0 : left;
-                left = left < maxScroll ? maxScroll : left;
+            var gridStartPos = { top: 0, left: 0 };
 
-                gridContent.css('webkitTransform', 'translate3d(' + left + 'px,0,0)');
-                gridHeaders.css('webkitTransform', 'translate3d(' + left + 'px,0,0)');
-            });
-    }
+            Hammer(gridContentWrapper[0])
+                .on('dragstart', function (e) {
+                    var curPos = gridContent.position();
+                    gridStartPos.top = curPos.top;
+                    gridStartPos.left = curPos.left;
+                }).on('drag', function (e) {
 
-    //Respond to native scroll in desktop
-    gridContentWrapper.on('scroll', function (e) {
-        var left = -($(this).scrollLeft()),
-            top = -($(this).scrollTop());
+                    e.preventDefault();
 
-        gridHeaders.css('left', left + "px");
-        gridLabels.css('top', top + "px");
-    });
+                    var maxLeftScroll = -(gridContent.outerWidth() - gridContentWrapper.outerWidth());
+                    var maxTopScroll = -(gridContent.outerHeight() - gridContentWrapper.outerHeight());
 
-})();
+                    var left = e.gesture.deltaX + gridStartPos.left;
+                    left = left > 0 ? 0 : left;
+                    left = left < maxLeftScroll ? maxLeftScroll : left;
+
+                    var top = e.gesture.deltaY + gridStartPos.top;
+                    top = top > 0 ? 0 : top;
+                    top = top < maxTopScroll ? maxTopScroll : top;
+
+                    gridContent.css({
+                        webkitTransform: 'translate3d(' + left + 'px,' + top + 'px,0)',
+                        left: left + "px",
+                        top: top + "px"
+                    });
+
+                    var curPos = gridContent.position();
+
+                    gridHeaders.css({
+                        left: curPos.left + "px"
+                    });
+
+                    gridLabels.css({
+                        top: curPos.top + "px"
+                    });
+                });
+
+            if (!isMobile) {
+                //Respond to native scroll in desktop
+                gridContentWrapper.on('scroll', function (e) {
+                    var left = -($(this).scrollLeft()),
+                        top = -($(this).scrollTop());
+
+                    gridHeaders.css('left', left + "px");
+                    gridLabels.css('top', top + "px");
+                });
+            }
+
+
+        });
+    };
+
+})(jQuery);
